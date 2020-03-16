@@ -1,0 +1,9 @@
+.field {
+  font-size: 18px;
+}
+.sub-field {
+  color:#ccc;
+}
+mat-card {
+  margin-bottom: 10px;
+}

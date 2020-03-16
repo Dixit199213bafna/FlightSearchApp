@@ -1,0 +1,7 @@
+{
+  "/v2/": {
+    "target": "https://sandbox-api.brewerydb.com",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

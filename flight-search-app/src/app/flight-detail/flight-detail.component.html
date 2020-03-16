@@ -1,0 +1,97 @@
+<section *ngIf="flightDetails">
+<mat-card>
+  <div class="row">
+    <div  class="{{flightDetails.searchCriteria.typeOfTrip === 'oneWay' ? 'col-lg-12' : 'col-lg-6'}}">
+      <div class="row">
+        <div class="col-md-2">
+          <div class="field">{{flightDetails.searchCriteria.source}}</div>
+          <div class="sub-field">{{flightDetails.oneWayFlights ? flightDetails.oneWayFlights.length : 0}} flights found</div>
+        </div>
+        <div class="col-md-1">
+          To
+        </div>
+        <div class="col-md-2">
+          <div class="field">{{flightDetails.searchCriteria.destination}}</div>
+          <div class="sub-field">{{flightDetails.searchCriteria.departureDate | date }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6" *ngIf="flightDetails.searchCriteria.typeOfTrip === 'return'">
+      <div class="row">
+        <div class="col-md-2">
+          <div class="field">{{flightDetails.searchCriteria.destination}}</div>
+          <div class="sub-field">{{flightDetails.returnFlights ? flightDetails.returnFlights.length : 0}} flights found</div>
+        </div>
+        <div class="col-md-1">
+          To
+        </div>
+        <div class="col-md-2">
+          <div class="field">{{flightDetails.searchCriteria.source}}</div>
+          <div class="sub-field">{{flightDetails.searchCriteria.returnDate | date }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-card>
+<div class="row">
+  <div class="{{flightDetails.searchCriteria.typeOfTrip === 'oneWay' ? 'col-lg-12' : 'col-lg-6'}}">
+    <mat-card *ngFor="let flight of flightDetails.oneWayFlights">
+      <div class="row">
+        <div class="col-md-2">
+          <div class="field">{{flight.name}}</div>
+          <div class="sub-field">{{flight.flightNo}}</div>
+        </div>
+        <div class="col-md-2">
+          <div class="field">{{flight.departureTime}} {{flight.departureTime.split(':')[0] > 12 ? 'PM' : 'AM'}}</div>
+          <div class="sub-field">{{flight.origin}}</div>
+        </div>
+        <div class="col-md-2">
+          <div class="field">{{flight.arrivalTime}} {{flight.arrivalTime.split(':')[0] > 12 ? 'PM' : 'AM'}}</div>
+          <div class="sub-field">{{flight.destination}}</div>
+        </div>
+        <div class="col-md-2">
+          <div class="field">{{flight.arrivalTime.split(':')[0] - flight.departureTime.split(':')[0]}}Hr : {{flight.arrivalTime.split(':')[1] - flight.departureTime.split(':')[1]}}Mins</div>
+          <div class="sub-field">Total duration</div>
+        </div>
+        <div class="col-md-2">
+          <div class="field">₹ {{flightDetails.searchCriteria.noOfPassengers * flight.price}}</div>
+          <div class="sub-field">{{flightDetails.searchCriteria.noOfPassengers}}* ₹ {{flight.price}}</div>
+        </div>
+        <div class="col-md-2">
+          <button mat-raised-button color="primary">Book</button>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+  <div class="col-lg-6" *ngIf="flightDetails.searchCriteria.typeOfTrip === 'return'">
+    <mat-card *ngFor="let flight of flightDetails.returnFlights">
+      <div class="row">
+        <div class="col-md-2">
+          <div class="field">{{flight.name}}</div>
+          <div class="sub-field">{{flight.flightNo}}</div>
+        </div>
+        <div class="col-md-2">
+          <div class="field">{{flight.departureTime}} {{flight.departureTime.split(':')[0] > 12 ? 'PM' : 'AM'}}</div>
+          <div class="sub-field">{{flight.origin}}</div>
+        </div>
+        <div class="col-md-2">
+          <div class="field">{{flight.arrivalTime}} {{flight.arrivalTime.split(':')[0] > 12 ? 'PM' : 'AM'}}</div>
+          <div class="sub-field">{{flight.destination}}</div>
+        </div>
+        <div class="col-md-2">
+          <div class="field">{{flight.arrivalTime.split(':')[0] - flight.departureTime.split(':')[0]}}Hr : {{flight.arrivalTime.split(':')[1] - flight.departureTime.split(':')[1]}}Mins</div>
+          <div class="sub-field">Total duration</div>
+        </div>
+        <div class="col-md-2">
+          <div class="field">₹ {{flightDetails.searchCriteria.noOfPassengers * flight.price}}</div>
+          <div class="sub-field">{{flightDetails.searchCriteria.noOfPassengers}}* ₹ {{flight.price}}</div>
+        </div>
+        <div class="col-md-2">
+          <button mat-raised-button color="primary">Book</button>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>
+
+</section>
