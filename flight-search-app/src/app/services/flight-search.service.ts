@@ -122,7 +122,7 @@ export class FlightSearchService {
           obj['internalFlights'] = [];
           obj['price'] = response[i].price;
           for( let j = 1; j < response.length ; j++) {
-            if(response[j].origin === response[i].destination && response[j].destination === searchCriteria.destination && new Date(response[j].date) >= new Date(formatDate(searchCriteria.returnDate))
+            if(response[j].origin === response[i].destination && response[j].destination === searchCriteria.source && new Date(response[j].date) >= new Date(formatDate(searchCriteria.returnDate))
               && (this.dateDiff(response[i].arrivalTime, response[j].departureTime).getHours() >=1 || (this.dateDiff(response[i].arrivalTime, response[j].departureTime).getMinutes() > 30))) {
               obj['internalFlights'].push(response[i]);
               obj['internalFlights'].push(response[j]);
