@@ -28,10 +28,10 @@ export class SearchFormComponent implements OnInit {
   searchForm = new FormGroup({
     source : new FormControl('', [Validators.required]),
     destination : new FormControl('', [Validators.required]),
-    typeOfTrip: new FormControl('return', ),
+    typeOfTrip: new FormControl('oneWay', ),
     noOfPassengers: new FormControl(1, [Validators.required]),
     departureDate: new FormControl('', [Validators.required]),
-    returnDate: new FormControl('', [Validators.required]),
+    returnDate: new FormControl({value: null, disabled: true}, [Validators.required]),
   });
   cities: string[] = ['Pune (PNQ)', 'Mumbai (BOM)', 'Bengaluru (BLR)', 'Delhi (DEL)'];
   sourceOptions: Observable<string[]>;
