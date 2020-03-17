@@ -8,7 +8,15 @@ import {FlightSearchService} from "../services/flight-search.service";
 })
 export class FlightDetailComponent implements OnInit {
   flightDetails;
-  constructor(private flightSearchService: FlightSearchService) { }
+  date;
+  constructor(public flightSearchService: FlightSearchService) {
+    this.date = new Date();
+  }
+
+  showFlightDetails(event,flight) {
+    event.preventDefault();
+    flight.showDetails = !flight.showDetails;
+  }
 
   ngOnInit(): void {
     this.flightSearchService.currentFlights.subscribe(flightDetails => this.flightDetails = flightDetails);
