@@ -1,9 +1,9 @@
 {
-  "name": "beer-assesment",
+  "name": "Flight Search Application",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config proxy.conf.json",
+    "start": "ng serve",
     "e2e-test": "testcafe chrome e2e/index.js"
   },
   "private": true,
@@ -22,6 +22,7 @@
     "ag-grid-community": "^22.1.1",
     "bootstrap": "^4.4.1",
     "lodash": "^4.17.15",
+    "ng5-slider": "^1.2.4",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"

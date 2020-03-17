@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Ng5SliderModule } from 'ng5-slider';
 
 import { MatRadioModule } from '@angular/material/radio';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -51,6 +52,7 @@ import { FlightSearchComponent } from './flight-search/flight-search.component';
     MatAutocompleteModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    Ng5SliderModule,
     MatProgressSpinnerModule
   ],
   providers: [MatDatepickerModule],

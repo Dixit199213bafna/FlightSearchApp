@@ -25,6 +25,7 @@ export class FlightSearchService {
 
   private flightSource = new BehaviorSubject(null);
   currentFlights = this.flightSource.asObservable();
+  private flightDetailsBackUp;
 
   constructor(private http: HttpClient) { }
 
@@ -118,7 +119,19 @@ export class FlightSearchService {
         });
       }
       flightDetails.returnFlights = [ ...flightDetails.returnFlights, ...multiReturnArray];
+      this.flightDetailsBackUp = flightDetails;
       this.flightSource.next(flightDetails)
     });
+  }
+
+  filterBasedOnMinMaxValue(min, max) {
+    const flightDetails = Object.assign({}, this.flightDetailsBackUp);
+    if(flightDetails){
+      flightDetails.oneWayFlights = flightDetails.oneWayFlights.filter(flight => flight.price >= min && flight.price <= max);
+      if(flightDetails.searchCriteria.typeOfTrip === 'return') {
+        flightDetails.returnFlights = flightDetails.returnFlights.filter(flight => flight.price >= min && flight.price <= max);
+      }
+    }
+    this.flightSource.next(flightDetails);
   }
 }

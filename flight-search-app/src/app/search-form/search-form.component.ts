@@ -3,6 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import { FlightSearchService } from '../services/flight-search.service';
+import { Options } from 'ng5-slider';
 
 export interface City {
   name: string;
@@ -17,6 +18,13 @@ export interface City {
 })
 export class SearchFormComponent implements OnInit {
   minDate: Date;
+  minValue: number = 0;
+  maxValue: number = 10000;
+  options: Options = {
+    floor: 0,
+    ceil: 10000
+  };
+  flightDetails;
   searchForm = new FormGroup({
     source : new FormControl('', [Validators.required]),
     destination : new FormControl('', [Validators.required]),
@@ -25,13 +33,7 @@ export class SearchFormComponent implements OnInit {
     departureDate: new FormControl('', [Validators.required]),
     returnDate: new FormControl('', [Validators.required]),
   });
-  cities: string[] = ['Pune (PNQ)', 'Mumbai (BOM)', 'Bengaluru (BLR)', 'Delhi (DEL)']
-  options: City[] = [
-    {name: 'Pune (PNQ)'},
-    {name: 'Mumbai (BOM)'},
-    {name: 'Bengaluru (BLR)'},
-    {name: 'Delhi (DEL)'},
-  ];
+  cities: string[] = ['Pune (PNQ)', 'Mumbai (BOM)', 'Bengaluru (BLR)', 'Delhi (DEL)'];
   sourceOptions: Observable<string[]>;
   destinationOptions: Observable<string[]>;
 
@@ -75,4 +77,8 @@ export class SearchFormComponent implements OnInit {
     }
   }
 
+  filterBasedOnMinMaxValue(event) {
+    console.log(event);
+    this.flightSearchService.filterBasedOnMinMaxValue(event.value, event.highValue);
+  }
 }
