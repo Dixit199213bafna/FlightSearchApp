@@ -59,79 +59,54 @@ export class FlightSearchService {
     };
     this.http.get('https://tw-frontenders.firebaseio.com/advFlightSearch.json').subscribe((response: any[]) => {
       const multipleOneWay = [];
-      for(let i=1; i<response.length; i++) {
-        if(response[i].origin === searchCriteria.source && response[i].destination !== searchCriteria.destination && response[i].date === formatDate(searchCriteria.departureDate)) {
-          const obj = {};
-          obj['name'] = 'Multiple';
-          obj['departureTime'] = response[i].departureTime;
-          obj['origin'] = response[i].origin;
-          obj['internalFlights'] = [];
-          obj['price'] = response[i].price;
-          for( let j = 1; j < response.length ; j++) {
-            if(response[j].origin === response[i].destination && response[j].destination === searchCriteria.destination && new Date(response[j].date) >= new Date(formatDate(searchCriteria.departureDate))
-            && (this.dateDiff(response[i].arrivalTime, response[j].departureTime).getHours() >=1 || (this.dateDiff(response[i].arrivalTime, response[j].departureTime).getMinutes() > 30))) {
-              obj['internalFlights'].push(response[i]);
-              obj['internalFlights'].push(response[j]);
-              obj['arrivalTime'] = response[j].arrivalTime;
-              obj['timeDuration'] = this.dateDiff(response[i].arrivalTime, response[j].departureTime, response[i].date, response[j].date).toString();
-              obj['date'] = response[i].date;
-              obj['price'] += response[j].price;
-              obj['destination'] = response[j].destination;
-              multipleOneWay.push(obj);
+      for(let flight of response) {
+        if(flight.origin === searchCriteria.source && flight.destination !== searchCriteria.destination && flight.date === formatDate(searchCriteria.departureDate)){
+          const flightObj = {};
+          flightObj['name'] = 'Multiple';
+          flightObj['departureTime'] = flight.departureTime;
+          flightObj['origin'] = flight.origin;
+          flightObj['internalFlights'] = [];
+          flightObj['price'] = flight.price;
+          for(let fli of response) {
+            if(fli.origin === flight.destination && fli.destination === searchCriteria.destination && new Date(fli.date) >= new Date(formatDate(searchCriteria.departureDate)) &&
+              (this.dateDiff(flight.arrivalTime, fli.departureTime).getHours() >= 1 || (this.dateDiff(flight.arrivalTime, fli.departureTime).getMinutes()) > 30)) {
+              flightObj['internalFlights'].push(flight);
+              flightObj['internalFlights'].push(fli);
+              flightObj['arrivalTime'] = fli.arrivalTime;
+              flightObj['timeDuration'] = this.dateDiff(flight.arrivalTime, fli.departureTime, flight.date, fli.date).toString();
+              flightObj['date'] = flight.date;
+              flightObj['price'] += fli.price;
+              flightObj['destination'] = fli.destination;
+              multipleOneWay.push(flightObj);
               break;
             }
           }
         }
       }
-      console.log(multipleOneWay);
       flightDetails.oneWayFlights = _.filter(response, (flight) => {
           return flight.origin === searchCriteria.source && flight.destination === searchCriteria.destination && flight.date === formatDate(searchCriteria.departureDate);
       });
-      // const a = response.map(flight => {
-      //   if(flight.origin === searchCriteria.source && flight.destination !== searchCriteria.destination && flight.date === formatDate(searchCriteria.departureDate)){
-      //     const flightObj = {};
-      //     flightObj['name'] = 'Multiple';
-      //     flightObj['departureTime'] = flight.departureTime;
-      //     flightObj['origin'] = flight.origin;
-      //     flightObj['internalFlights'] = [];
-      //     flightObj['price'] = flight.price;
-      //     response.forEach(fli => {
-      //       if(fli.origin === flight.destination && fli.destination === searchCriteria.destination && new Date(fli.date) >= new Date(formatDate(searchCriteria.departureDate)) &&
-      //         (this.dateDiff(flight.arrivalTime, fli.departureTime).getHours() >= 1 || (this.dateDiff(flight.arrivalTime, fli.departureTime).getMinutes()) > 30)) {
-      //         flightObj['internalFlights'].push(flight);
-      //         flightObj['internalFlights'].push(fli);
-      //         flightObj['arrivalTime'] = fli.arrivalTime;
-      //         flightObj['timeDuration'] = this.dateDiff(flight.arrivalTime, fli.departureTime, flight.date, fli.date).toString();
-      //         flightObj['date'] = flight.date;
-      //         flightObj['price'] += fli.price;
-      //         flightObj['destination'] = fli.destination;
-      //         return flightObj;
-      //       }
-      //     })
-      //   }
-      // });
-      // console.log(a);
       flightDetails.oneWayFlights = [ ...flightDetails.oneWayFlights, ...multipleOneWay];
-      const multiReturnArray = []
-      for(let i=1; i<response.length; i++) {
-        if(response[i].origin === searchCriteria.destination && response[i].destination !== searchCriteria.source && response[i].date === formatDate(searchCriteria.returnDate)) {
-          const obj = {};
-          obj['name'] = 'Multiple';
-          obj['departureTime'] = response[i].departureTime;
-          obj['origin'] = response[i].origin;
-          obj['internalFlights'] = [];
-          obj['price'] = response[i].price;
-          for( let j = 1; j < response.length ; j++) {
-            if(response[j].origin === response[i].destination && response[j].destination === searchCriteria.source && new Date(response[j].date) >= new Date(formatDate(searchCriteria.returnDate))
-              && (this.dateDiff(response[i].arrivalTime, response[j].departureTime).getHours() >=1 || (this.dateDiff(response[i].arrivalTime, response[j].departureTime).getMinutes() > 30))) {
-              obj['internalFlights'].push(response[i]);
-              obj['internalFlights'].push(response[j]);
-              obj['arrivalTime'] = response[j].arrivalTime;
-              obj['timeDuration'] = this.dateDiff(response[i].arrivalTime, response[j].departureTime, response[i].date, response[j].date).toString();
-              obj['date'] = response[i].date;
-              obj['price'] += response[j].price;
-              obj['destination'] = response[j].destination;
-              multiReturnArray.push(obj);
+      const multiReturnArray = [];
+      for(let flight of response) {
+        if(flight.origin === searchCriteria.destination && flight.destination !== searchCriteria.source && flight.date === formatDate(searchCriteria.returnDate)){
+          const flightObj = {};
+          flightObj['name'] = 'Multiple';
+          flightObj['departureTime'] = flight.departureTime;
+          flightObj['origin'] = flight.origin;
+          flightObj['internalFlights'] = [];
+          flightObj['price'] = flight.price;
+          for(let fli of response) {
+            if(fli.origin === flight.destination && fli.destination === searchCriteria.source && new Date(fli.date) >= new Date(formatDate(searchCriteria.returnDate)) &&
+              (this.dateDiff(flight.arrivalTime, fli.departureTime).getHours() >= 1 || (this.dateDiff(flight.arrivalTime, fli.departureTime).getMinutes()) > 30)) {
+              flightObj['internalFlights'].push(flight);
+              flightObj['internalFlights'].push(fli);
+              flightObj['arrivalTime'] = fli.arrivalTime;
+              flightObj['timeDuration'] = this.dateDiff(flight.arrivalTime, fli.departureTime, flight.date, fli.date).toString();
+              flightObj['date'] = flight.date;
+              flightObj['price'] += fli.price;
+              flightObj['destination'] = fli.destination;
+              multiReturnArray.push(flightObj);
               break;
             }
           }
