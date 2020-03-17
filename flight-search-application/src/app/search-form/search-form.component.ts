@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators, ValidatorFn} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import { FlightSearchService } from '../services/flight-search.service';
@@ -8,8 +8,6 @@ import { Options } from 'ng5-slider';
 export interface City {
   name: string;
 }
-
-
 
 @Component({
   selector: 'app-search-form',

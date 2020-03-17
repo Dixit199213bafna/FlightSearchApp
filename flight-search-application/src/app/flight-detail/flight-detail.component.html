@@ -1,0 +1,173 @@
+<section *ngIf="flightDetails">
+  <div class="row">
+    <div class="{{flightDetails.searchCriteria.typeOfTrip === 'oneWay' ? 'col-lg-12' : 'col-lg-6'}}" id="oneWayTrips">
+      <div class="row">
+        <div  class="col-lg-12">
+          <mat-card class="flightSearch">
+            <div class="row">
+              <div class="col-5">
+                <div class="field">{{flightDetails.searchCriteria.source}}</div>
+                <div class="sub-field">{{flightDetails.oneWayFlights ? flightDetails.oneWayFlights.length : 0}} flights found</div>
+              </div>
+              <div class="col-2">
+                To
+              </div>
+              <div class="col-5">
+                <div class="field">{{flightDetails.searchCriteria.destination}}</div>
+                <div class="sub-field">{{flightDetails.searchCriteria.departureDate | date }}</div>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+      <mat-card *ngFor="let flight of flightDetails.oneWayFlights" class="one-way-flight">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-2">
+                <div class="field">{{flight.name}}</div>
+                <div class="sub-field" *ngIf="flight.name === 'Multiple'; else elseBlock"><a href="" (click)="showFlightDetails($event, flight)">{{flight.showDetails ? 'Hide details' : 'Show details'}}</a></div>
+                <ng-template #elseBlock>{{flight.flightNo}}</ng-template>
+              </div>
+              <div class="col-sm-2">
+                <div class="field">{{flight.departureTime}} {{flight.departureTime.split(':')[0] > 12 ? 'PM' : 'AM'}}</div>
+                <div class="sub-field">{{flight.origin}}</div>
+              </div>
+              <div class="col-sm-2">
+                <div class="field">{{flight.arrivalTime}} {{flight.arrivalTime.split(':')[0] > 12 ? 'PM' : 'AM'}}</div>
+                <div class="sub-field">{{flight.destination}}</div>
+              </div>
+              <div class="col-sm-2">
+                <div class="field">{{flightSearchService.dateDiff(flight.departureTime, flight.arrivalTime).toString()}}</div>
+                <div class="sub-field">Total duration</div>
+              </div>
+              <div class="col-sm-2">
+                <div class="field">₹ {{flightDetails.searchCriteria.noOfPassengers * flight.price}}</div>
+                <div class="sub-field">{{flightDetails.searchCriteria.noOfPassengers}}* ₹ {{flight.price}}</div>
+              </div>
+              <div class="col-sm-2">
+                <button mat-raised-button color="primary">Book</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-12" id="multiFlight" *ngIf="flight.showDetails">
+            <div class="row" *ngFor="let flightInfo of flight.internalFlights; index as i">
+              <div class="col-sm-12">
+                <div class="row">
+                  <div class="col-sm-2">
+                    <div class="field">{{flightInfo.name}}</div>
+                    <div class="sub-field">{{flightInfo.date}}</div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="field">{{flightInfo.departureTime}} {{flightInfo.departureTime.split(':')[0] > 12 ? 'PM' : 'AM'}}</div>
+                    <div class="sub-field">{{flightInfo.origin}}</div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="field">{{flightInfo.arrivalTime}} {{flightInfo.arrivalTime.split(':')[0] > 12 ? 'PM' : 'AM'}}</div>
+                    <div class="sub-field">{{flightInfo.destination}}</div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="field">{{flightSearchService.dateDiff(flightInfo.departureTime, flightInfo.arrivalTime).toString()}}</div>
+                    <div class="sub-field">Total duration</div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="field">₹ {{flightDetails.searchCriteria.noOfPassengers * flightInfo.price}}</div>
+                    <div class="sub-field">{{flightDetails.searchCriteria.noOfPassengers}}* ₹ {{flightInfo.price}}</div>
+                  </div>
+                  <div class="col-lg-9 timeDiff" *ngIf="i === 0">
+                    -----------------------------------Layover {{flight.timeDuration}}----------------------------
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+    <div class="col-lg-6" *ngIf="flightDetails.searchCriteria.typeOfTrip === 'return'" id="returnTrips">
+      <div class="row">
+        <div class="col-lg-12">
+          <mat-card class="flightSearch">
+            <div class="row">
+              <div class="col-5">
+                <div class="field">{{flightDetails.searchCriteria.destination}}</div>
+                <div class="sub-field">{{flightDetails.returnFlights ? flightDetails.returnFlights.length : 0}} flights found</div>
+              </div>
+              <div class="col-2">
+                To
+              </div>
+              <div class="col-5">
+                <div class="field">{{flightDetails.searchCriteria.source}}</div>
+                <div class="sub-field">{{flightDetails.searchCriteria.returnDate | date }}</div>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+      <mat-card *ngFor="let flight of flightDetails.returnFlights" class="return-flight">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-2">
+                <div class="field">{{flight.name}}</div>
+                <div class="sub-field" *ngIf="flight.name === 'Multiple'; else elseBlock"><a href="" (click)="showFlightDetails($event, flight)">{{flight.showDetails ? 'Hide details' : 'Show details'}}</a></div>
+                <ng-template #elseBlock>{{flight.flightNo}}</ng-template>
+              </div>
+              <div class="col-sm-2">
+                <div class="field">{{flight.departureTime}} {{flight.departureTime.split(':')[0] > 12 ? 'PM' : 'AM'}}</div>
+                <div class="sub-field">{{flight.origin}}</div>
+              </div>
+              <div class="col-sm-2">
+                <div class="field">{{flight.arrivalTime}} {{flight.arrivalTime.split(':')[0] > 12 ? 'PM' : 'AM'}}</div>
+                <div class="sub-field">{{flight.destination}}</div>
+              </div>
+              <div class="col-sm-2">
+                <div class="field">{{flightSearchService.dateDiff(flight.departureTime, flight.arrivalTime).toString()}}</div>
+                <div class="sub-field">Total duration</div>
+              </div>
+              <div class="col-sm-2">
+                <div class="field">₹ {{flightDetails.searchCriteria.noOfPassengers * flight.price}}</div>
+                <div class="sub-field">{{flightDetails.searchCriteria.noOfPassengers}}* ₹ {{flight.price}}</div>
+              </div>
+              <div class="col-sm-2">
+                <button mat-raised-button color="primary">Book</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-12" id="multiFlight" *ngIf="flight.showDetails">
+            <div class="row" *ngFor="let flightInfo of flight.internalFlights; index as i">
+              <div class="col-sm-12">
+                <div class="row">
+                  <div class="col-sm-2">
+                    <div class="field">{{flightInfo.name}}</div>
+                    <div class="sub-field">{{flightInfo.date}}</div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="field">{{flightInfo.departureTime}} {{flightInfo.departureTime.split(':')[0] > 12 ? 'PM' : 'AM'}}</div>
+                    <div class="sub-field">{{flightInfo.origin}}</div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="field">{{flightInfo.arrivalTime}} {{flightInfo.arrivalTime.split(':')[0] > 12 ? 'PM' : 'AM'}}</div>
+                    <div class="sub-field">{{flightInfo.destination}}</div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="field">{{flightSearchService.dateDiff(flightInfo.departureTime, flightInfo.arrivalTime).toString()}}</div>
+                    <div class="sub-field">Total duration</div>
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="field">₹ {{flightDetails.searchCriteria.noOfPassengers * flightInfo.price}}</div>
+                    <div class="sub-field">{{flightDetails.searchCriteria.noOfPassengers}}* ₹ {{flightInfo.price}}</div>
+                  </div>
+                  <div class="col-sm-9 timeDiff" *ngIf="i === 0">
+                    -----------------------------------Layover {{flight.timeDuration}}----------------------------
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+</section>

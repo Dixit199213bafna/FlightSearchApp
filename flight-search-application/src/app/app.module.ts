@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule} from "@angular/common/http";
-import { AgGridModule } from 'ag-grid-angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -40,7 +39,6 @@ import { FlightSearchComponent } from './flight-search/flight-search.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    AgGridModule.withComponents([]),
     BrowserAnimationsModule,
     MatExpansionModule,
     MatSelectModule,
