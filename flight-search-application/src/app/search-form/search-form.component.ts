@@ -5,10 +5,6 @@ import {map, startWith} from 'rxjs/operators';
 import { FlightSearchService } from '../services/flight-search.service';
 import { Options } from 'ng5-slider';
 
-export interface City {
-  name: string;
-}
-
 @Component({
   selector: 'app-search-form',
   templateUrl: './search-form.component.html',
@@ -22,14 +18,13 @@ export class SearchFormComponent implements OnInit {
     floor: 0,
     ceil: 10000
   };
-  flightDetails;
   searchForm = new FormGroup({
     source : new FormControl('', [Validators.required]),
-    destination : new FormControl('', [Validators.required]),
+    destination : new FormControl('', [Validators.required, this.differentFromSource.bind(this)]),
     typeOfTrip: new FormControl('oneWay', ),
     noOfPassengers: new FormControl(1, [Validators.required]),
     departureDate: new FormControl('', [Validators.required]),
-    returnDate: new FormControl({value: null, disabled: true}, [Validators.required]),
+    returnDate: new FormControl({value: null, disabled: true}, [Validators  .required]),
   });
   cities: string[] = ['Pune (PNQ)', 'Mumbai (BOM)', 'Bengaluru (BLR)', 'Delhi (DEL)'];
   sourceOptions: Observable<string[]>;
@@ -37,6 +32,13 @@ export class SearchFormComponent implements OnInit {
 
   constructor(private flightSearchService: FlightSearchService) {
     this.minDate = new Date();
+  }
+
+  differentFromSource(control: FormControl): {[s: string]: boolean} {
+    if(this.searchForm && control.value === this.searchForm.get('source').value) {
+      return { valid: false}
+    }
+    return null;
   }
 
   ngOnInit() {
