@@ -1,5 +1,5 @@
 <div class="row">
-  <form [formGroup]="searchForm"  (ngSubmit)="searchFlight()">
+  <form [formGroup]="searchForm" id="searchForm" (ngSubmit)="searchFlight()">
     <div class="col-lg-12">
       <mat-radio-group aria-label="Select an option" formControlName="typeOfTrip">
         <mat-radio-button id="oneWay" value="oneWay">One Way</mat-radio-button>

@@ -21,7 +21,7 @@ export class SearchFormComponent implements OnInit {
   searchForm = new FormGroup({
     source : new FormControl('', [Validators.required]),
     destination : new FormControl('', [Validators.required, this.differentFromSource.bind(this)]),
-    typeOfTrip: new FormControl('oneWay', ),
+    typeOfTrip: new FormControl('oneWay'),
     noOfPassengers: new FormControl(1, [Validators.required]),
     departureDate: new FormControl('', [Validators.required]),
     returnDate: new FormControl({value: null, disabled: true}, [Validators  .required]),
@@ -77,7 +77,6 @@ export class SearchFormComponent implements OnInit {
   }
 
   filterBasedOnMinMaxValue(event) {
-    console.log(event);
     this.flightSearchService.filterBasedOnMinMaxValue(event.value, event.highValue);
   }
 }

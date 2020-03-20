@@ -15,7 +15,7 @@ const formatDate = (date) => {
     day = '0' + day;
 
   return [year, month, day].join('/');
-}
+};
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +26,11 @@ export class FlightSearchService {
   private flightSource = new BehaviorSubject(null);
   currentFlights = this.flightSource.asObservable();
   private flightDetailsBackUp;
+  flightDetails = {
+    oneWayFlights: [],
+    returnFlights: [],
+    searchCriteria: null
+  };
 
   constructor(private http: HttpClient) { }
 
@@ -53,7 +58,7 @@ export class FlightSearchService {
 
 
   fetchFlightDetailsBasedOnSearchCriteria(searchCriteria) {
-    const flightDetails = {
+    this.flightDetails = {
       oneWayFlights: [],
       returnFlights: [],
       searchCriteria: searchCriteria,
@@ -84,10 +89,10 @@ export class FlightSearchService {
           }
         }
       }
-      flightDetails.oneWayFlights = _.filter(response, (flight) => {
+      this.flightDetails.oneWayFlights = _.filter(response, (flight) => {
           return flight.origin === searchCriteria.source && flight.destination === searchCriteria.destination && flight.date === formatDate(searchCriteria.departureDate);
       });
-      flightDetails.oneWayFlights = [ ...flightDetails.oneWayFlights, ...multipleOneWay];
+      this.flightDetails.oneWayFlights = [ ...this.flightDetails.oneWayFlights, ...multipleOneWay];
       const multiReturnArray = [];
       for(let flight of response) {
         if(flight.origin === searchCriteria.destination && flight.destination !== searchCriteria.source && flight.date === formatDate(searchCriteria.returnDate)){
@@ -114,24 +119,24 @@ export class FlightSearchService {
         }
       }
       if(searchCriteria.typeOfTrip === 'return') {
-        flightDetails.returnFlights = _.filter(response, (flight) => {
+        this.flightDetails.returnFlights = _.filter(response, (flight) => {
           return flight.origin === searchCriteria.destination && flight.destination === searchCriteria.source && flight.date === formatDate(searchCriteria.returnDate);
         });
       }
-      flightDetails.returnFlights = [ ...flightDetails.returnFlights, ...multiReturnArray];
-      this.flightDetailsBackUp = flightDetails;
-      this.flightSource.next(flightDetails)
+      this.flightDetails.returnFlights = [ ...this.flightDetails.returnFlights, ...multiReturnArray];
+      this.flightDetailsBackUp = this.flightDetails;
+      this.flightSource.next(this.flightDetails)
     });
   }
 
   filterBasedOnMinMaxValue(min, max) {
-    const flightDetails = Object.assign({}, this.flightDetailsBackUp);
-    if(flightDetails){
-      flightDetails.oneWayFlights = flightDetails.oneWayFlights.filter(flight => flight.price >= min && flight.price <= max);
-      if(flightDetails.searchCriteria.typeOfTrip === 'return') {
-        flightDetails.returnFlights = flightDetails.returnFlights.filter(flight => flight.price >= min && flight.price <= max);
+    this.flightDetails = Object.assign({}, this.flightDetailsBackUp);
+    if(this.flightDetails){
+      this.flightDetails.oneWayFlights = this.flightDetails.oneWayFlights.filter(flight => flight.price >= min && flight.price <= max);
+      if(this.flightDetails.searchCriteria.typeOfTrip === 'return') {
+        this.flightDetails.returnFlights = this.flightDetails.returnFlights.filter(flight => flight.price >= min && flight.price <= max);
       }
     }
-    this.flightSource.next(flightDetails);
+    this.flightSource.next(this.flightDetails);
   }
 }
