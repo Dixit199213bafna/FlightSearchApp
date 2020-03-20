@@ -55,7 +55,6 @@ export class SearchFormComponent implements OnInit {
 
     this.searchForm.get('typeOfTrip').valueChanges
       .subscribe(value => {
-        console.log(value);
         if(value === 'return') {
           this.searchForm.get('returnDate').setValidators([Validators.required]);
           this.searchForm.get('returnDate').enable();

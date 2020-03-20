@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "e2e-test": "testcafe chrome e2e/index.js"
+    "e2e-test": "testcafe chrome e2e/index.js",
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {

@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SearchFormComponent } from './search-form.component';
+import {FlightSearchService} from "../services/flight-search.service";
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 describe('SearchFormComponent', () => {
   let component: SearchFormComponent;
@@ -8,7 +11,9 @@ describe('SearchFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SearchFormComponent ]
+      declarations: [ SearchFormComponent ],
+      imports: [ HttpClientTestingModule, MatAutocompleteModule ],
+      providers: [FlightSearchService]
     })
     .compileComponents();
   }));
